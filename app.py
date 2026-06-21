@@ -10,45 +10,41 @@ import bcrypt as _bcrypt
 from jose import JWTError, jwt
 import uuid
 
-# =================================================================
-# 1. BANCO DE DADOS
-# =================================================================
+# banco local em sqlite, arquivo criado automatico quando rodar
 SQLALCHEMY_DATABASE_URL = "sqlite:///./raizes_nordeste.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# =================================================================
-# 2. SEGURANÇA (JWT + BCrypt)
-# =================================================================
+# chave secreta do jwt
 SECRET_KEY = "raizes_nordeste_chave_secreta_2026"
 ALGORITHM = "HS256"
 TOKEN_EXPIRA_MINUTOS = 60
 
 bearer_scheme = HTTPBearer()
 
-# =================================================================
-# 3. MODELOS DO BANCO (Tabelas)
-# =================================================================
+# tabela de usuarios do sistema
 class Usuario(Base):
     __tablename__ = "usuarios"
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
-    senha_hash = Column(String, nullable=False)
-    perfil = Column(String, default="CLIENTE")          # ADMIN ou CLIENTE
+    senha_hash = Column(String, nullable=False)  # nunca salvar senha pura
+    perfil = Column(String, default="CLIENTE")   # ADMIN ou CLIENTE
     consentimento_lgpd = Column(Boolean, default=False)
     data_consentimento = Column(DateTime, nullable=True)
     criado_em = Column(DateTime, default=datetime.utcnow)
 
+# produtos do cardapio
 class Produto(Base):
     __tablename__ = "produtos"
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String, nullable=False)
     descricao = Column(String)
     preco = Column(Float, nullable=False)
-    ativo = Column(Boolean, default=True)
+    ativo = Column(Boolean, default=True)  # desativar em vez de deletar
 
+# pedido feito pelo cliente
 class Pedido(Base):
     __tablename__ = "pedidos"
     id = Column(Integer, primary_key=True, index=True)
@@ -56,51 +52,50 @@ class Pedido(Base):
     data_criacao = Column(DateTime, default=datetime.utcnow)
     valor_total = Column(Float, default=0.0)
     status = Column(String, default="AGUARDANDO_PAGAMENTO")
-    canal_pedido = Column(String, nullable=False)       # APP, TOTEM, BALCAO
-    forma_pagamento = Column(String, nullable=False)    # PIX, CARTAO, DINHEIRO
+    canal_pedido = Column(String, nullable=False)    # APP, TOTEM ou BALCAO
+    forma_pagamento = Column(String, nullable=False) # PIX, CARTAO ou DINHEIRO
 
     usuario = relationship("Usuario")
     itens = relationship("ItemPedido", back_populates="pedido")
     pagamento = relationship("Pagamento", back_populates="pedido", uselist=False)
 
+# cada linha de produto dentro do pedido
 class ItemPedido(Base):
     __tablename__ = "itens_pedido"
     id = Column(Integer, primary_key=True, index=True)
     pedido_id = Column(Integer, ForeignKey("pedidos.id"), nullable=False)
     produto_id = Column(Integer, ForeignKey("produtos.id"), nullable=False)
     quantidade = Column(Integer, nullable=False)
-    preco_unitario = Column(Float, nullable=False)
+    preco_unitario = Column(Float, nullable=False)  # salvo na hora pra nao mudar se o preco mudar depois
 
     pedido = relationship("Pedido", back_populates="itens")
     produto = relationship("Produto")
 
+# registro do pagamento mesmo que seja mock
 class Pagamento(Base):
     __tablename__ = "pagamentos"
     id = Column(Integer, primary_key=True, index=True)
     pedido_id = Column(Integer, ForeignKey("pedidos.id"), nullable=False)
     metodo = Column(String)
-    status_mock = Column(String)   # APROVADO ou RECUSADO
+    status_mock = Column(String)  # APROVADO ou RECUSADO
     transacao_id = Column(String)
     data_processamento = Column(DateTime, default=datetime.utcnow)
 
     pedido = relationship("Pedido", back_populates="pagamento")
 
-# Cria todas as tabelas no banco SQLite
+# aqui cria as tabelas no banco quando rodar pela primeira vez
 Base.metadata.create_all(bind=engine)
 
-# =================================================================
-# 4. DEPENDENCY: SESSÃO DO BANCO
-# =================================================================
+
 def get_db():
+    # abre a conexao e fecha depois que terminar
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
 
-# =================================================================
-# 5. FUNÇÕES DE AUTENTICAÇÃO
-# =================================================================
+
 def hash_senha(senha: str) -> str:
     return _bcrypt.hashpw(senha.encode(), _bcrypt.gensalt()).decode()
 
@@ -116,6 +111,7 @@ def obter_usuario_logado(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
     db: Session = Depends(get_db)
 ):
+    # valida o token que vem no header authorization
     try:
         payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
@@ -129,9 +125,8 @@ def obter_usuario_logado(
         raise HTTPException(status_code=401, detail={"error": "NAO_AUTENTICADO", "message": "Usuário não encontrado."})
     return usuario
 
-# =================================================================
-# 6. SCHEMAS (Contratos da API / Swagger)
-# =================================================================
+
+# formatos de entrada esperados pela api
 class RegistroSchema(BaseModel):
     nome: str
     email: str
@@ -153,23 +148,21 @@ class ItemSchema(BaseModel):
     quantidade: int
 
 class PedidoCreate(BaseModel):
-    canal_pedido: str       # APP, TOTEM, BALCAO
-    forma_pagamento: str    # PIX, CARTAO, DINHEIRO
+    canal_pedido: str    # APP, TOTEM ou BALCAO..
+    forma_pagamento: str # PIX, CARTAO ou DINHEIRO..
     itens: List[ItemSchema]
 
 class AtualizarStatusSchema(BaseModel):
     status: str
 
-# =================================================================
-# 7. APP FASTAPI
-# =================================================================
+
 app = FastAPI(
     title="API Raízes do Nordeste",
     description="Sistema de pedidos da rede Raízes do Nordeste — Projeto Multidisciplinar Back-End",
     version="1.0.0"
 )
 
-# Handler global: garante que erros sempre retornem {"error": ..., "message": ...}
+# garante que todo erro retorna erro em vez do padrao do fastapi
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
     detail = exc.detail
@@ -177,9 +170,9 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         return JSONResponse(status_code=exc.status_code, content=detail)
     return JSONResponse(status_code=exc.status_code, content={"error": "ERRO", "message": str(detail)})
 
-# =================================================================
-# 8. ENDPOINTS — AUTH
-# =================================================================
+
+# --- autenticacao ---
+
 @app.post("/auth/registro", tags=["Auth"], summary="Registrar novo usuário", status_code=201)
 def registro(dados: RegistroSchema, db: Session = Depends(get_db)):
     if db.query(Usuario).filter(Usuario.email == dados.email).first():
@@ -211,9 +204,9 @@ def login(dados: LoginSchema, db: Session = Depends(get_db)):
     token = criar_token(usuario.email, usuario.perfil)
     return {"token": token}
 
-# =================================================================
-# 9. ENDPOINTS — PRODUTOS
-# =================================================================
+
+# --- produtos ---
+
 @app.post("/produtos", tags=["Produtos"], summary="Cadastrar produto", status_code=201)
 def criar_produto(dados: ProdutoCreate, db: Session = Depends(get_db), usuario=Depends(obter_usuario_logado)):
     if dados.preco <= 0:
@@ -231,15 +224,15 @@ def listar_produtos(db: Session = Depends(get_db), usuario=Depends(obter_usuario
     produtos = db.query(Produto).filter(Produto.ativo == True).all()
     return [{"id": p.id, "nome": p.nome, "descricao": p.descricao, "preco": p.preco} for p in produtos]
 
-# =================================================================
-# 10. ENDPOINTS — PEDIDOS
-# =================================================================
+
+# --- pedidos ---
+
+# valores aceitos pra nao deixar entrar qualquer coisa
 CANAIS_VALIDOS = ["APP", "TOTEM", "BALCAO"]
 STATUS_VALIDOS = ["AGUARDANDO_PAGAMENTO", "PAGAMENTO_APROVADO", "EM_PREPARO", "PRONTO", "ENTREGUE", "CANCELADO"]
 
 @app.post("/pedidos", tags=["Pedidos"], summary="Criar pedido", status_code=201)
 def criar_pedido(dados: PedidoCreate, db: Session = Depends(get_db), usuario=Depends(obter_usuario_logado)):
-    # Validar campos obrigatórios
     campos_faltando = []
     if not dados.canal_pedido:
         campos_faltando.append("canal_pedido")
@@ -253,7 +246,6 @@ def criar_pedido(dados: PedidoCreate, db: Session = Depends(get_db), usuario=Dep
     if dados.canal_pedido.upper() not in CANAIS_VALIDOS:
         raise HTTPException(400, {"error": "CANAL_INVALIDO", "message": f"Canal inválido. Use: {CANAIS_VALIDOS}"})
 
-    # Criar o pedido
     pedido = Pedido(
         usuario_id=usuario.id,
         status="AGUARDANDO_PAGAMENTO",
@@ -262,7 +254,7 @@ def criar_pedido(dados: PedidoCreate, db: Session = Depends(get_db), usuario=Dep
         valor_total=0.0
     )
     db.add(pedido)
-    db.flush()  # obtém o id do pedido sem commitar ainda
+    db.flush()  # precisa do id do pedido antes de salvar os itens.
 
     total = 0.0
     for item_dados in dados.itens:
@@ -306,6 +298,7 @@ def listar_pedidos(
 ):
     query = db.query(Pedido)
     if canal_pedido:
+        # filtro opcional 
         query = query.filter(Pedido.canal_pedido == canal_pedido.upper())
     pedidos = query.all()
 
@@ -366,20 +359,22 @@ def atualizar_status(id: int, dados: AtualizarStatusSchema, db: Session = Depend
     db.commit()
     return {"pedido_id": pedido.id, "novo_status": pedido.status}
 
-# =================================================================
-# 11. ENDPOINTS — PAGAMENTOS
-# =================================================================
+
+# --- pagamento ---
+
 @app.post("/pagamentos/processar/{id}", tags=["Pagamentos"], summary="Processar pagamento (mock)")
 def processar_pagamento(id: int, db: Session = Depends(get_db), usuario=Depends(obter_usuario_logado)):
     pedido = db.query(Pedido).filter(Pedido.id == id).first()
     if not pedido:
         raise HTTPException(404, {"error": "PEDIDO_NAO_ENCONTRADO", "message": "Pedido não encontrado."})
 
+    # so processa se ainda estiver esperando pagamento
     if pedido.status != "AGUARDANDO_PAGAMENTO":
         raise HTTPException(409, {"error": "STATUS_INVALIDO", "message": "Pedido não está aguardando pagamento."})
 
-    # Regra do gateway mock: aprova até R$ 1000, recusa acima
     transacao_id = str(uuid.uuid4())
+
+    # simulacao do gateway: aprova ate 1000, recusa acima disso
     if pedido.valor_total <= 1000.0:
         status_pagamento = "APROVADO"
         novo_status_pedido = "PAGAMENTO_APROVADO"
