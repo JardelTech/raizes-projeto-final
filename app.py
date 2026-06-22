@@ -125,6 +125,11 @@ def obter_usuario_logado(
         raise HTTPException(status_code=401, detail={"error": "NAO_AUTENTICADO", "message": "Usuário não encontrado."})
     return usuario
 
+def exigir_admin(usuario=Depends(obter_usuario_logado)):
+    if usuario.perfil != "ADMIN":
+        raise HTTPException(status_code=403, detail={"error": "ACESSO_NEGADO", "message": "Acesso restrito a administradores."})
+    return usuario
+
 
 # formatos de entrada esperados pela api
 class RegistroSchema(BaseModel):
@@ -207,8 +212,8 @@ def login(dados: LoginSchema, db: Session = Depends(get_db)):
 
 # --- produtos ---
 
-@app.post("/produtos", tags=["Produtos"], summary="Cadastrar produto", status_code=201)
-def criar_produto(dados: ProdutoCreate, db: Session = Depends(get_db), usuario=Depends(obter_usuario_logado)):
+@app.post("/produtos", tags=["Produtos"], summary="Cadastrar produto (somente ADMIN)", status_code=201)
+def criar_produto(dados: ProdutoCreate, db: Session = Depends(get_db), usuario=Depends(exigir_admin)):
     if dados.preco <= 0:
         raise HTTPException(400, {"error": "PRECO_INVALIDO", "message": "O preço deve ser maior que zero."})
 
@@ -346,8 +351,8 @@ def buscar_pedido(id: int, db: Session = Depends(get_db), usuario=Depends(obter_
     }
 
 
-@app.patch("/pedidos/{id}/status", tags=["Pedidos"], summary="Atualizar status do pedido")
-def atualizar_status(id: int, dados: AtualizarStatusSchema, db: Session = Depends(get_db), usuario=Depends(obter_usuario_logado)):
+@app.patch("/pedidos/{id}/status", tags=["Pedidos"], summary="Atualizar status do pedido (somente ADMIN)")
+def atualizar_status(id: int, dados: AtualizarStatusSchema, db: Session = Depends(get_db), usuario=Depends(exigir_admin)):
     pedido = db.query(Pedido).filter(Pedido.id == id).first()
     if not pedido:
         raise HTTPException(404, {"error": "PEDIDO_NAO_ENCONTRADO", "message": "Pedido não encontrado."})
