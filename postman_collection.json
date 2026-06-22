@@ -1,0 +1,128 @@
+{
+	"info": {
+		"name": "Raízes do Nordeste",
+		"description": "Coleção de testes da API Raízes do Nordeste (Projeto Multidisciplinar).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "T01 - Cadastrar Usuário",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Jardel Silva\",\r\n  \"email\": \"jardel@email.com\",\r\n  \"senha\": \"minhasenha123\",\r\n  \"perfil\": \"CLIENTE\",\r\n  \"consentimento_lgpd\": true\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/auth/registro",
+					"protocol": "http",
+					"host": ["127", "0", "0", "1"],
+					"port": "8000",
+					"path": ["auth", "registro"]
+				}
+			}
+		},
+		{
+			"name": "T02 - Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"jardel@email.com\",\r\n  \"senha\": \"minhasenha123\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/auth/login",
+					"protocol": "http",
+					"host": ["127", "0", "0", "1"],
+					"port": "8000",
+					"path": ["auth", "login"]
+				}
+			}
+		},
+		{
+			"name": "T03 - Cadastrar Produto",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nome\": \"Baião de Dois\",\r\n  \"descricao\": \"Arroz com feijão e carne seca\",\r\n  \"preco\": 32.90\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/produtos",
+					"protocol": "http",
+					"host": ["127", "0", "0", "1"],
+					"port": "8000",
+					"path": ["produtos"]
+				}
+			}
+		},
+		{
+			"name": "T05 - Criar Pedido (APP)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"canal_pedido\": \"APP\",\r\n  \"forma_pagamento\": \"PIX\",\r\n  \"itens\": [\r\n    {\r\n      \"produto_id\": 1,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/pedidos",
+					"protocol": "http",
+					"host": ["127", "0", "0", "1"],
+					"port": "8000",
+					"path": ["pedidos"]
+				}
+			}
+		},
+		{
+			"name": "T08 - Processar Pagamento Mock",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/pagamentos/processar/1",
+					"protocol": "http",
+					"host": ["127", "0", "0", "1"],
+					"port": "8000",
+					"path": ["pagamentos", "processar", "1"]
+				}
+			}
+		}
+	]
+}
