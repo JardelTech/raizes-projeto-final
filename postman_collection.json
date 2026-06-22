@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "Raízes do Nordeste",
-		"description": "Coleção completa de testes da API Raízes do Nordeste (Projeto Multidisciplinar).\n\nAntes de usar:\n1. Execute T01 para criar o usuário.\n2. Execute T02 para fazer login e copie o token retornado.\n3. Cole o token nos campos 'Bearer COLOQUE_SEU_TOKEN_AQUI' dos demais requests.",
+		"description": "Coleção completa de testes da API Raízes do Nordeste (Projeto Multidisciplinar).\n\nAntes de usar:\n1. Execute T01 para criar um usuário CLIENTE.\n2. Execute T02 para criar um usuário ADMIN.\n3. Execute T03 (login ADMIN) e copie o token — use em endpoints de ADMIN (T04, T05, T13–T15).\n4. Execute login do CLIENTE e copie o token — use nos demais endpoints.\n5. Cole os tokens nos campos 'Bearer ...' dos requests correspondentes.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -12,7 +12,12 @@
 					"name": "T01 - Cadastrar Usuário (sucesso)",
 					"request": {
 						"method": "POST",
-						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"nome\": \"Jardel Silva\",\n  \"email\": \"jardel@email.com\",\n  \"senha\": \"minhasenha123\",\n  \"perfil\": \"CLIENTE\",\n  \"consentimento_lgpd\": true\n}"
@@ -20,9 +25,17 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/auth/registro",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["auth", "registro"]
+							"path": [
+								"auth",
+								"registro"
+							]
 						}
 					}
 				},
@@ -30,7 +43,12 @@
 					"name": "T02 - Cadastrar Usuário ADMIN (sucesso)",
 					"request": {
 						"method": "POST",
-						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"nome\": \"Admin Raízes\",\n  \"email\": \"admin@raizesnordeste.com\",\n  \"senha\": \"adminsenha456\",\n  \"perfil\": \"ADMIN\",\n  \"consentimento_lgpd\": true\n}"
@@ -38,9 +56,17 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/auth/registro",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["auth", "registro"]
+							"path": [
+								"auth",
+								"registro"
+							]
 						}
 					}
 				},
@@ -48,7 +74,12 @@
 					"name": "T03 - Login (sucesso — copie o token retornado)",
 					"request": {
 						"method": "POST",
-						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"email\": \"jardel@email.com\",\n  \"senha\": \"minhasenha123\"\n}"
@@ -56,9 +87,17 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/auth/login",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["auth", "login"]
+							"path": [
+								"auth",
+								"login"
+							]
 						}
 					}
 				},
@@ -66,7 +105,12 @@
 					"name": "E01 - Erro: E-mail já cadastrado (400)",
 					"request": {
 						"method": "POST",
-						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"nome\": \"Jardel Silva\",\n  \"email\": \"jardel@email.com\",\n  \"senha\": \"minhasenha123\",\n  \"perfil\": \"CLIENTE\",\n  \"consentimento_lgpd\": true\n}"
@@ -74,9 +118,17 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/auth/registro",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["auth", "registro"]
+							"path": [
+								"auth",
+								"registro"
+							]
 						}
 					}
 				},
@@ -84,7 +136,12 @@
 					"name": "E02 - Erro: Perfil inválido (400)",
 					"request": {
 						"method": "POST",
-						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"nome\": \"Fulano\",\n  \"email\": \"fulano@email.com\",\n  \"senha\": \"senha123\",\n  \"perfil\": \"GERENTE\",\n  \"consentimento_lgpd\": true\n}"
@@ -92,9 +149,17 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/auth/registro",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["auth", "registro"]
+							"path": [
+								"auth",
+								"registro"
+							]
 						}
 					}
 				},
@@ -102,7 +167,12 @@
 					"name": "E03 - Erro: Credenciais inválidas (401)",
 					"request": {
 						"method": "POST",
-						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"email\": \"jardel@email.com\",\n  \"senha\": \"senhaerrada\"\n}"
@@ -110,9 +180,17 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/auth/login",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["auth", "login"]
+							"path": [
+								"auth",
+								"login"
+							]
 						}
 					}
 				}
@@ -122,12 +200,18 @@
 			"name": "Produtos",
 			"item": [
 				{
-					"name": "T04 - Cadastrar Produto (sucesso)",
+					"name": "T04 - Cadastrar Produto (sucesso — token de ADMIN)",
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -136,9 +220,16 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/produtos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["produtos"]
+							"path": [
+								"produtos"
+							]
 						}
 					}
 				},
@@ -147,8 +238,14 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -157,9 +254,16 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/produtos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["produtos"]
+							"path": [
+								"produtos"
+							]
 						}
 					}
 				},
@@ -168,14 +272,24 @@
 					"request": {
 						"method": "GET",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/produtos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["produtos"]
+							"path": [
+								"produtos"
+							]
 						}
 					}
 				},
@@ -184,8 +298,14 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -194,9 +314,16 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/produtos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["produtos"]
+							"path": [
+								"produtos"
+							]
 						}
 					}
 				},
@@ -208,10 +335,52 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/produtos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["produtos"]
+							"path": [
+								"produtos"
+							]
 						}
+					}
+				},
+				{
+					"name": "E12 - Erro: Acesso negado — CLIENTE tentando cadastrar produto (403)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_TOKEN_DO_CLIENTE_AQUI"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Produto Indevido\",\n  \"descricao\": \"Tentativa não autorizada\",\n  \"preco\": 10.0\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/produtos",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"produtos"
+							]
+						},
+						"description": "Usuário com perfil CLIENTE tenta cadastrar produto. Esperado: 403 ACESSO_NEGADO. Regra: apenas ADMIN pode criar produtos."
 					}
 				}
 			]
@@ -224,8 +393,14 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -234,9 +409,16 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos"]
+							"path": [
+								"pedidos"
+							]
 						}
 					}
 				},
@@ -245,8 +427,14 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -255,9 +443,16 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos"]
+							"path": [
+								"pedidos"
+							]
 						}
 					}
 				},
@@ -266,8 +461,14 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -276,9 +477,16 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos"]
+							"path": [
+								"pedidos"
+							]
 						}
 					}
 				},
@@ -287,14 +495,24 @@
 					"request": {
 						"method": "GET",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos"]
+							"path": [
+								"pedidos"
+							]
 						}
 					}
 				},
@@ -303,15 +521,30 @@
 					"request": {
 						"method": "GET",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos?canal_pedido=APP",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos"],
-							"query": [{ "key": "canal_pedido", "value": "APP" }]
+							"path": [
+								"pedidos"
+							],
+							"query": [
+								{
+									"key": "canal_pedido",
+									"value": "APP"
+								}
+							]
 						}
 					}
 				},
@@ -320,24 +553,41 @@
 					"request": {
 						"method": "GET",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos/1",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos", "1"]
+							"path": [
+								"pedidos",
+								"1"
+							]
 						}
 					}
 				},
 				{
-					"name": "T13 - Atualizar Status do Pedido (EM_PREPARO)",
+					"name": "T13 - Atualizar Status do Pedido (ADMIN — EM_PREPARO)",
 					"request": {
 						"method": "PATCH",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -346,19 +596,34 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos/1/status",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos", "1", "status"]
+							"path": [
+								"pedidos",
+								"1",
+								"status"
+							]
 						}
 					}
 				},
 				{
-					"name": "T14 - Atualizar Status do Pedido (PRONTO)",
+					"name": "T14 - Atualizar Status do Pedido (ADMIN — PRONTO)",
 					"request": {
 						"method": "PATCH",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -367,19 +632,34 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos/1/status",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos", "1", "status"]
+							"path": [
+								"pedidos",
+								"1",
+								"status"
+							]
 						}
 					}
 				},
 				{
-					"name": "T15 - Atualizar Status do Pedido (ENTREGUE)",
+					"name": "T15 - Atualizar Status do Pedido (ADMIN — ENTREGUE)",
 					"request": {
 						"method": "PATCH",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -388,9 +668,18 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos/1/status",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos", "1", "status"]
+							"path": [
+								"pedidos",
+								"1",
+								"status"
+							]
 						}
 					}
 				},
@@ -399,8 +688,14 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -409,9 +704,16 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos"]
+							"path": [
+								"pedidos"
+							]
 						}
 					}
 				},
@@ -420,8 +722,14 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -430,9 +738,16 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos"]
+							"path": [
+								"pedidos"
+							]
 						}
 					}
 				},
@@ -441,8 +756,14 @@
 					"request": {
 						"method": "PATCH",
 						"header": [
-							{ "key": "Content-Type", "value": "application/json" },
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"body": {
 							"mode": "raw",
@@ -451,9 +772,18 @@
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos/1/status",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos", "1", "status"]
+							"path": [
+								"pedidos",
+								"1",
+								"status"
+							]
 						}
 					}
 				},
@@ -462,15 +792,63 @@
 					"request": {
 						"method": "GET",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/pedidos/9999",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pedidos", "9999"]
+							"path": [
+								"pedidos",
+								"9999"
+							]
 						}
+					}
+				},
+				{
+					"name": "E13 - Erro: Acesso negado — CLIENTE tentando atualizar status (403)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_TOKEN_DO_CLIENTE_AQUI"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"ENTREGUE\"\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos/1/status",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"pedidos",
+								"1",
+								"status"
+							]
+						},
+						"description": "Usuário com perfil CLIENTE tenta atualizar status de pedido. Esperado: 403 ACESSO_NEGADO. Regra: apenas ADMIN pode alterar status."
 					}
 				}
 			]
@@ -483,14 +861,26 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/pagamentos/processar/1",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pagamentos", "processar", "1"]
+							"path": [
+								"pagamentos",
+								"processar",
+								"1"
+							]
 						}
 					}
 				},
@@ -499,14 +889,26 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/pagamentos/processar/2",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pagamentos", "processar", "2"]
+							"path": [
+								"pagamentos",
+								"processar",
+								"2"
+							]
 						}
 					}
 				},
@@ -515,14 +917,26 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/pagamentos/processar/1",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pagamentos", "processar", "1"]
+							"path": [
+								"pagamentos",
+								"processar",
+								"1"
+							]
 						}
 					}
 				},
@@ -531,14 +945,26 @@
 					"request": {
 						"method": "POST",
 						"header": [
-							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+							{
+								"key": "Authorization",
+								"value": "Bearer COLOQUE_SEU_TOKEN_AQUI"
+							}
 						],
 						"url": {
 							"raw": "http://127.0.0.1:8000/pagamentos/processar/9999",
 							"protocol": "http",
-							"host": ["127", "0", "0", "1"],
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
 							"port": "8000",
-							"path": ["pagamentos", "processar", "9999"]
+							"path": [
+								"pagamentos",
+								"processar",
+								"9999"
+							]
 						}
 					}
 				}
