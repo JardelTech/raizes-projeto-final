@@ -1,0 +1,548 @@
+{
+	"info": {
+		"name": "Raízes do Nordeste",
+		"description": "Coleção completa de testes da API Raízes do Nordeste (Projeto Multidisciplinar).\n\nAntes de usar:\n1. Execute T01 para criar o usuário.\n2. Execute T02 para fazer login e copie o token retornado.\n3. Cole o token nos campos 'Bearer COLOQUE_SEU_TOKEN_AQUI' dos demais requests.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "T01 - Cadastrar Usuário (sucesso)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Jardel Silva\",\n  \"email\": \"jardel@email.com\",\n  \"senha\": \"minhasenha123\",\n  \"perfil\": \"CLIENTE\",\n  \"consentimento_lgpd\": true\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/registro",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["auth", "registro"]
+						}
+					}
+				},
+				{
+					"name": "T02 - Cadastrar Usuário ADMIN (sucesso)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Admin Raízes\",\n  \"email\": \"admin@raizesnordeste.com\",\n  \"senha\": \"adminsenha456\",\n  \"perfil\": \"ADMIN\",\n  \"consentimento_lgpd\": true\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/registro",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["auth", "registro"]
+						}
+					}
+				},
+				{
+					"name": "T03 - Login (sucesso — copie o token retornado)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jardel@email.com\",\n  \"senha\": \"minhasenha123\"\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/login",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "E01 - Erro: E-mail já cadastrado (400)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Jardel Silva\",\n  \"email\": \"jardel@email.com\",\n  \"senha\": \"minhasenha123\",\n  \"perfil\": \"CLIENTE\",\n  \"consentimento_lgpd\": true\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/registro",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["auth", "registro"]
+						}
+					}
+				},
+				{
+					"name": "E02 - Erro: Perfil inválido (400)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Fulano\",\n  \"email\": \"fulano@email.com\",\n  \"senha\": \"senha123\",\n  \"perfil\": \"GERENTE\",\n  \"consentimento_lgpd\": true\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/registro",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["auth", "registro"]
+						}
+					}
+				},
+				{
+					"name": "E03 - Erro: Credenciais inválidas (401)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"jardel@email.com\",\n  \"senha\": \"senhaerrada\"\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/login",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["auth", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Produtos",
+			"item": [
+				{
+					"name": "T04 - Cadastrar Produto (sucesso)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Baião de Dois\",\n  \"descricao\": \"Arroz com feijão e carne seca\",\n  \"preco\": 32.90\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/produtos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["produtos"]
+						}
+					}
+				},
+				{
+					"name": "T05 - Cadastrar Produto caro (para testar pagamento recusado)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Cesta Nordestina Premium\",\n  \"descricao\": \"Kit completo com produtos típicos do Nordeste\",\n  \"preco\": 1200.00\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/produtos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["produtos"]
+						}
+					}
+				},
+				{
+					"name": "T06 - Listar Produtos (sucesso)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/produtos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["produtos"]
+						}
+					}
+				},
+				{
+					"name": "E04 - Erro: Preço inválido (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nome\": \"Produto inválido\",\n  \"descricao\": \"Preço zero não deve ser aceito\",\n  \"preco\": 0\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/produtos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["produtos"]
+						}
+					}
+				},
+				{
+					"name": "E05 - Erro: Sem autenticação (401)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/produtos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["produtos"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Pedidos",
+			"item": [
+				{
+					"name": "T07 - Criar Pedido (canal APP — PIX)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"canal_pedido\": \"APP\",\n  \"forma_pagamento\": \"PIX\",\n  \"itens\": [\n    {\n      \"produto_id\": 1,\n      \"quantidade\": 2\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "T08 - Criar Pedido (canal TOTEM — CARTAO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"canal_pedido\": \"TOTEM\",\n  \"forma_pagamento\": \"CARTAO\",\n  \"itens\": [\n    {\n      \"produto_id\": 1,\n      \"quantidade\": 1\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "T09 - Criar Pedido (canal BALCAO — DINHEIRO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"canal_pedido\": \"BALCAO\",\n  \"forma_pagamento\": \"DINHEIRO\",\n  \"itens\": [\n    {\n      \"produto_id\": 1,\n      \"quantidade\": 3\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "T10 - Listar Todos os Pedidos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "T11 - Listar Pedidos Filtrado por Canal (APP)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos?canal_pedido=APP",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos"],
+							"query": [{ "key": "canal_pedido", "value": "APP" }]
+						}
+					}
+				},
+				{
+					"name": "T12 - Buscar Pedido por ID (sucesso)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos/1",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos", "1"]
+						}
+					}
+				},
+				{
+					"name": "T13 - Atualizar Status do Pedido (EM_PREPARO)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"EM_PREPARO\"\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos/1/status",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos", "1", "status"]
+						}
+					}
+				},
+				{
+					"name": "T14 - Atualizar Status do Pedido (PRONTO)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"PRONTO\"\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos/1/status",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos", "1", "status"]
+						}
+					}
+				},
+				{
+					"name": "T15 - Atualizar Status do Pedido (ENTREGUE)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"ENTREGUE\"\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos/1/status",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos", "1", "status"]
+						}
+					}
+				},
+				{
+					"name": "E06 - Erro: Canal inválido (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"canal_pedido\": \"DRIVE_THRU\",\n  \"forma_pagamento\": \"PIX\",\n  \"itens\": [\n    { \"produto_id\": 1, \"quantidade\": 1 }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "E07 - Erro: Produto não encontrado (404)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"canal_pedido\": \"APP\",\n  \"forma_pagamento\": \"PIX\",\n  \"itens\": [\n    { \"produto_id\": 9999, \"quantidade\": 1 }\n  ]\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos"]
+						}
+					}
+				},
+				{
+					"name": "E08 - Erro: Status inválido (400)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"EM_ESPERA\"\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos/1/status",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos", "1", "status"]
+						}
+					}
+				},
+				{
+					"name": "E09 - Erro: Pedido não encontrado (404)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/pedidos/9999",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pedidos", "9999"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Pagamentos",
+			"item": [
+				{
+					"name": "T16 - Processar Pagamento (APROVADO — valor ≤ R$1.000)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/pagamentos/processar/1",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pagamentos", "processar", "1"]
+						}
+					}
+				},
+				{
+					"name": "T17 - Processar Pagamento (RECUSADO — valor > R$1.000)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/pagamentos/processar/2",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pagamentos", "processar", "2"]
+						}
+					}
+				},
+				{
+					"name": "E10 - Erro: Pagamento já processado (409)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/pagamentos/processar/1",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pagamentos", "processar", "1"]
+						}
+					}
+				},
+				{
+					"name": "E11 - Erro: Pedido não encontrado no pagamento (404)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer COLOQUE_SEU_TOKEN_AQUI" }
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/pagamentos/processar/9999",
+							"protocol": "http",
+							"host": ["127", "0", "0", "1"],
+							"port": "8000",
+							"path": ["pagamentos", "processar", "9999"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
